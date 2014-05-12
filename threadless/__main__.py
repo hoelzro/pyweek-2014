@@ -16,14 +16,29 @@ class Player(object):
     def move_down(self):
         self.y += 1
 
+    def move_up(self):
+        self.y -= 1
+
+    def move_left(self):
+        self.x -= 1
+
+    def move_right(self):
+        self.x += 1
+
 class Screen(object):
     Q = 1
     J = 2
+    K = 3
+    H = 4
+    L = 5
 
 class CursesScreen(Screen):
     KEY_MAP = {
         Screen.Q: ord('q'),
         Screen.J: ord('j'),
+        Screen.K: ord('k'),
+        Screen.H: ord('h'),
+        Screen.L: ord('l'),
     }
 
     CHAR_FOR_TYPE = {
@@ -82,8 +97,13 @@ class Game(object):
         self.is_running = True
         self.tickers = []
         self.screen = CursesScreen()
+
         self.screen.on_key_down(Screen.Q, self.stop_running)
         self.screen.on_key_down(Screen.J, self.move_down)
+        self.screen.on_key_down(Screen.K, self.move_up)
+        self.screen.on_key_down(Screen.H, self.move_left)
+        self.screen.on_key_down(Screen.L, self.move_right)
+
         width, height = self.screen.get_size()
         x = int(width / 2)
         y = int(height / 2)
@@ -113,6 +133,15 @@ class Game(object):
 
     def move_down(self):
         self.player.move_down()
+
+    def move_up(self):
+        self.player.move_up()
+
+    def move_left(self):
+        self.player.move_left()
+
+    def move_right(self):
+        self.player.move_right()
 
 def main():
     """ your app starts here
