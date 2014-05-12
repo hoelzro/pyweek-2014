@@ -116,6 +116,10 @@ class Game(object):
         self.player = Player(x, y)
         self.screen.add_object(self.player)
 
+        self.enemies = [ Enemy(0, 0) ]
+        for enemy in self.enemies:
+            self.screen.add_object(enemy)
+
         self.screen.on_key_down(Screen.Q, self.stop_running)
         self.screen.on_key_down(Screen.J, self.player.move_down)
         self.screen.on_key_down(Screen.K, self.player.move_up)
