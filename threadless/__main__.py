@@ -8,9 +8,7 @@ class Game(object):
 
     def __init__(self):
         self.tickers = []
-
-    def draw(self):
-        pass
+        self.screen = CursesScreen()
 
     def run(self):
         sec_per_frame = 1 / 60.0
@@ -18,7 +16,7 @@ class Game(object):
 
         start = datetime.now()
         while is_running:
-            self.draw()
+            self.screen.draw()
             for ticker in self.tickers:
                 ticker()
 
