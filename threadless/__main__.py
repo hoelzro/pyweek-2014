@@ -12,12 +12,18 @@ class Player(object):
     def getpos(self):
         return self.x, self.y
 
+    # XXX screen boundaries
+    def move_down(self):
+        self.y += 1
+
 class Screen(object):
     Q = 1
+    J = 2
 
 class CursesScreen(Screen):
     KEY_MAP = {
         Screen.Q: ord('q'),
+        Screen.J: ord('j'),
     }
 
     CHAR_FOR_TYPE = {
@@ -76,6 +82,7 @@ class Game(object):
         self.tickers = []
         self.screen = CursesScreen()
         self.screen.on_key_down(Screen.Q, self.stop_running)
+        self.screen.on_key_down(Screen.J, self.move_down)
         width, height = self.screen.get_size()
         x = int(width / 2)
         y = int(height / 2)
@@ -102,6 +109,9 @@ class Game(object):
 
     def stop_running(self):
         self.is_running = False
+
+    def move_down(self):
+        self.player.move_down()
 
 def main():
     """ your app starts here
