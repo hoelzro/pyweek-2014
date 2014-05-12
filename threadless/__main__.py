@@ -29,6 +29,9 @@ class Positional(object):
 class Player(Positional):
     pass
 
+class Enemy(Positional):
+    pass
+
 class Screen(object):
     Q = 1
     J = 2
@@ -46,7 +49,8 @@ class CursesScreen(Screen):
     }
 
     CHAR_FOR_TYPE = {
-        Player: 'P'
+        Player: 'P',
+        Enemy:  'E',
     }
 
     def __init__(self):
