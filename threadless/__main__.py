@@ -5,7 +5,7 @@ from datetime import datetime
 import sys
 import time
 
-class Player(object):
+class Positional(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -25,6 +25,9 @@ class Player(object):
 
     def move_right(self):
         self.x += 1
+
+class Player(Positional):
+    pass
 
 class Screen(object):
     Q = 1
