@@ -102,17 +102,17 @@ class Game(object):
         self.tickers = []
         self.screen = CursesScreen()
 
-        self.screen.on_key_down(Screen.Q, self.stop_running)
-        self.screen.on_key_down(Screen.J, self.move_down)
-        self.screen.on_key_down(Screen.K, self.move_up)
-        self.screen.on_key_down(Screen.H, self.move_left)
-        self.screen.on_key_down(Screen.L, self.move_right)
-
         width, height = self.screen.get_size()
         x = int(width / 2)
         y = int(height / 2)
         self.player = Player(x, y)
         self.screen.add_object(self.player)
+
+        self.screen.on_key_down(Screen.Q, self.stop_running)
+        self.screen.on_key_down(Screen.J, self.player.move_down)
+        self.screen.on_key_down(Screen.K, self.player.move_up)
+        self.screen.on_key_down(Screen.H, self.player.move_left)
+        self.screen.on_key_down(Screen.L, self.player.move_right)
 
         self.tickers.append(self.screen.process_input)
 
@@ -134,18 +134,6 @@ class Game(object):
 
     def stop_running(self):
         self.is_running = False
-
-    def move_down(self):
-        self.player.move_down()
-
-    def move_up(self):
-        self.player.move_up()
-
-    def move_left(self):
-        self.player.move_left()
-
-    def move_right(self):
-        self.player.move_right()
 
 def main():
     """ your app starts here
