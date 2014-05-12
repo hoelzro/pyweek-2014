@@ -53,17 +53,18 @@ class Game(object):
     FRAME_RATE = 60
 
     def __init__(self):
+        self.is_running = True
         self.tickers = []
         self.screen = CursesScreen()
+        self.screen.on_key_down(Screen.Q, self.stop_running)
 
         self.tickers.append(self.screen.process_input)
 
     def run(self):
         sec_per_frame = 1 / 60.0
-        is_running   = True
 
         start = datetime.now()
-        while is_running:
+        while self.is_running:
             self.screen.draw()
             for ticker in self.tickers:
                 ticker()
@@ -74,6 +75,9 @@ class Game(object):
             if wait_time > 0:
                 time.sleep(wait_time)
             start = end
+
+    def stop_running(self):
+        self.is_running = False
 
 def main():
     """ your app starts here
