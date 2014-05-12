@@ -4,12 +4,24 @@ import curses
 from datetime import datetime
 import time
 
+class Player(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def getpos(self):
+        return self.x, self.y
+
 class Screen(object):
     Q = 1
 
 class CursesScreen(Screen):
     KEY_MAP = {
         Screen.Q: ord('q'),
+    }
+
+    CHAR_FOR_TYPE = {
+        Player: 'P'
     }
 
     def __init__(self):
@@ -20,6 +32,7 @@ class CursesScreen(Screen):
         self.screen.keypad(1)
 
         self.keybindings = {}
+        self.objects = []
 
     def __del__(self):
         curses.nocbreak()
@@ -28,12 +41,15 @@ class CursesScreen(Screen):
         curses.endwin()
 
     def draw(self):
-        height, width = self.screen.getmaxyx()
-        y = int(height / 2)
-        x = int(width / 2)
-
-        self.screen.addch(y, x, 'P')
+        for obj in self.objects:
+            x, y = obj.getpos()
+            c    = self.CHAR_FOR_TYPE[type(obj)]
+            self.screen.addch(y, x, c)
         self.screen.refresh()
+
+    def get_size(self):
+        height, width = self.screen.getmaxyx()
+        return width, height
 
     def on_key_down(self, key, callback):
         key = self.KEY_MAP[key]
@@ -49,6 +65,9 @@ class CursesScreen(Screen):
             for cb in callbacks:
                 cb()
 
+    def add_object(self, obj):
+        self.objects.append(obj)
+
 class Game(object):
     FRAME_RATE = 60
 
@@ -57,6 +76,11 @@ class Game(object):
         self.tickers = []
         self.screen = CursesScreen()
         self.screen.on_key_down(Screen.Q, self.stop_running)
+        width, height = self.screen.get_size()
+        x = int(width / 2)
+        y = int(height / 2)
+        self.player = Player(x, y)
+        self.screen.add_object(self.player)
 
         self.tickers.append(self.screen.process_input)
 
