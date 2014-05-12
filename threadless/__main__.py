@@ -24,7 +24,7 @@ class CursesScreen(object):
         x = int(width / 2)
 
         self.screen.addch(y, x, 'P')
-        curses.doupdate()
+        self.screen.refresh()
 
 class Game(object):
     FRAME_RATE = 60
