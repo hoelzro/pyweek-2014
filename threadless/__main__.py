@@ -6,10 +6,17 @@ import time
 
 class CursesScreen(object):
     def __init__(self):
-        pass
+        self.screen = curses.initscr()
+        curses.noecho()
+        curses.cbreak()
+        curses.nodelay()
+        self.screen.keypad(1)
 
     def __del__(self):
-        pass
+        curses.nocbreak()
+        self.screen.keypad(0)
+        curses.echo()
+        curses.endwin()
 
 class Game(object):
     FRAME_RATE = 60
