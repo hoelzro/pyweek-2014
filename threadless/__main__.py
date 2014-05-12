@@ -9,7 +9,7 @@ class CursesScreen(object):
         self.screen = curses.initscr()
         curses.noecho()
         curses.cbreak()
-        curses.nodelay()
+        self.screen.nodelay(1)
         self.screen.keypad(1)
 
     def __del__(self):
