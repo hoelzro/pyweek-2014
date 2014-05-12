@@ -18,6 +18,14 @@ class CursesScreen(object):
         curses.echo()
         curses.endwin()
 
+    def draw(self):
+        height, width = self.screen.getmaxyx()
+        y = int(height / 2)
+        x = int(width / 2)
+
+        self.screen.addch(y, x, 'P')
+        curses.doupdate()
+
 class Game(object):
     FRAME_RATE = 60
 
