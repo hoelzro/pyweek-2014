@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import curses
 from datetime import datetime
+import sys
 import time
 
 class Player(object):
@@ -147,5 +148,9 @@ def main():
     """ your app starts here
     """
 
-    game = Game()
-    game.run()
+    try:
+        game = Game()
+        game.run()
+    except Exception, e:
+        print(sys.exc_info())
+        print(str(e))
