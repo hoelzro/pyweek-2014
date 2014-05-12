@@ -26,6 +26,10 @@ class Positional(object):
     def move_right(self):
         self.x += 1
 
+    def move_rel(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
 class Player(Positional):
     pass
 
