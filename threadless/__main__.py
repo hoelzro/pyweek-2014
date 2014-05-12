@@ -123,6 +123,7 @@ class Game(object):
         self.screen.on_key_down(Screen.L, self.player.move_right)
 
         self.tickers.append(self.screen.process_input)
+        self.tickers.append(self.move_enemies)
 
     def run(self):
         sec_per_frame = 1 / 60.0
@@ -142,6 +143,18 @@ class Game(object):
 
     def stop_running(self):
         self.is_running = False
+
+    def move_enemies(self):
+        player_x, player_y = self.player.getpos()
+        for enemy in self.enemies:
+            enemy_x, enemy_y = enemy.getpos()
+            dx = player_x - enemy_x
+            dy = player_y - enemy_y
+
+            if dx < dy:
+                enemy.move_rel(0, -1 if dy < 0 else 1)
+            else:
+                enemy.move_rel(-1 if dx < 0 else 1, 0)
 
 def main():
     """ your app starts here
