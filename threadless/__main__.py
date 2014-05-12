@@ -47,6 +47,7 @@ class CursesScreen(Screen):
         curses.endwin()
 
     def draw(self):
+        self.screen.erase()
         for obj in self.objects:
             x, y = obj.getpos()
             c    = self.CHAR_FOR_TYPE[type(obj)]
