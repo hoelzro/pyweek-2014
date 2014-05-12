@@ -1,7 +1,15 @@
 from __future__ import print_function
 
+import curses
 from datetime import datetime
 import time
+
+class CursesScreen(object):
+    def __init__(self):
+        pass
+
+    def __del__(self):
+        pass
 
 class Game(object):
     FRAME_RATE = 60
