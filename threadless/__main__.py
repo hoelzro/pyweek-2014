@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import curses
-from datetime import datetime
 import sys
 import time
 
@@ -132,15 +131,15 @@ class Game(object):
     def run(self):
         sec_per_frame = 1 / 60.0
 
-        start = datetime.now()
+        start = time.time()
         while self.is_running:
             self.screen.draw()
             for ticker in self.tickers:
                 ticker()
 
-            end       = datetime.now()
+            end       = time.time()
             delta     = end - start
-            wait_time = sec_per_frame - (end - start).microseconds * 1000000
+            wait_time = sec_per_frame - (end - start)
             if wait_time > 0:
                 time.sleep(wait_time)
             start = end
