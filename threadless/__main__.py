@@ -7,29 +7,37 @@ import time
 
 
 class Positional(object):
-    def __init__(self, x, y):
+    def __init__(self, x, y, width, height):
         self.x = x
         self.y = y
+        self.MAX_X = width
+        self.MAX_Y = height
 
     def getpos(self):
         return self.x, self.y
 
     # XXX screen boundaries
     def move_down(self):
-        self.y += 1
+        if self.y < self.MAX_Y - 1:
+            self.y += 1
 
     def move_up(self):
-        self.y -= 1
+        if self.y > 0:
+            self.y -= 1
 
     def move_left(self):
-        self.x -= 1
+        if self.x > 0:
+            self.x -= 1
 
     def move_right(self):
-        self.x += 1
+        if self.x < self.MAX_X - 2:
+            self.x += 1
 
     def move_rel(self, dx, dy):
-        self.x += dx
-        self.y += dy
+        if 0 <= self.x + dx < self.MAX_X - 2:
+            self.x += dx
+        if 0 <= self.y + dy < self.MAX_Y - 1:
+            self.y += dy
 
 
 class Player(Positional):
@@ -129,10 +137,10 @@ class Game(object):
         width, height = self.screen.get_size()
         x = int(width / 2)
         y = int(height / 2)
-        self.player = Player(x, y)
+        self.player = Player(x, y, width, height)
         self.screen.add_object(self.player)
 
-        self.enemies = [ Enemy(0, 0) ]
+        self.enemies = [ Enemy(0, 0, width, height) ]
         for enemy in self.enemies:
             self.screen.add_object(enemy)
 
