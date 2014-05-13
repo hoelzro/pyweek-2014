@@ -121,7 +121,9 @@ class Game(object):
 
     def __init__(self):
         self.is_running = True
-        self.tickers = []
+        self.tickers = [
+            # (ticker, tick_delay)
+        ]
         self.screen = CursesScreen()
 
         width, height = self.screen.get_size()
@@ -140,21 +142,34 @@ class Game(object):
         self.screen.on_key_down(Screen.H, self.player.move_left)
         self.screen.on_key_down(Screen.L, self.player.move_right)
 
-        self.tickers.append(self.screen.process_input)
-        self.tickers.append(self.move_enemies)
+        self.tickers.append((self.screen.process_input, 1))
+        self.tickers.append((self.move_enemies, 20))
 
     def run(self):
-        sec_per_frame = 1 / 60.0
+        frames_per_second = 60.0
+        seconds_per_frame = 1 / frames_per_second
+
+        # ticks_per_second:
+        # 1 -> 60
+        # 2 -> 30
+        # 3 -> 20
+        # 4 -> 15
+        # 5 -> 12
+        # 6 -> 10
+        # 60 -> 1
 
         start = time.time()
+        tick = 0
         while self.is_running:
+            tick = (tick + 1) % 60
             self.screen.draw()
-            for ticker in self.tickers:
-                ticker()
+            for ticker, tick_delay in self.tickers:
+                if tick % tick_delay == 0:
+                    ticker()
 
             end       = time.time()
             delta     = end - start
-            wait_time = sec_per_frame - (end - start)
+            wait_time = seconds_per_frame - (end - start)
             if wait_time > 0:
                 time.sleep(wait_time)
             start = end
