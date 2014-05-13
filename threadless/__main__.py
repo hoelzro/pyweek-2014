@@ -55,9 +55,6 @@ class Screen(object):
     L = 5
 
 
-@atexit.register
-def cleanup_curses():
-    curses.endwin()
 
 
 class CursesScreen(Screen):
@@ -84,10 +81,7 @@ class CursesScreen(Screen):
         self.keybindings = {}
         self.objects = []
 
-    def __del__(self):
-        # @rob: The atexit handler is necessary because
-        # there's no guarantee that the garbage collector
-        # runs
+    def teardown(self):
         curses.nocbreak()
         self.screen.keypad(0)
         curses.echo()
@@ -152,6 +146,9 @@ class Game(object):
         self.tickers.append((self.screen.process_input, 1))
         self.tickers.append((self.move_enemies, 20))
 
+    def teardown(self):
+        self.screen.teardown()
+
     def run(self):
         frames_per_second = 60.0
         seconds_per_frame = 1 / frames_per_second
@@ -206,3 +203,5 @@ def main():
     except Exception, e:
         print(sys.exc_info())
         print(str(e))
+    finally:
+        game.teardown()
