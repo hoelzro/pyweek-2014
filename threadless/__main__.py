@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+from abc import abstractmethod, ABCMeta
 import atexit
 import curses
 import sys
@@ -54,7 +55,48 @@ class Screen(object):
     H = 4
     L = 5
 
+    __metaclass__ = ABCMeta
 
+    @abstractmethod
+    def draw(self):
+        '''
+            Draws things on the screen.
+        '''
+        pass
+
+    @abstractmethod
+    def get_size(self):
+        '''
+            Returns the width and height of the screen.
+        '''
+        pass
+
+    @abstractmethod
+    def on_key_down(self, key, callback):
+        '''
+            Sets up a callback to be called when the given key is pressed.  Key constants
+            from Screen should be used, and may be translated by this method implemention
+            into native key codes.
+        '''
+        pass
+
+    @abstractmethod
+    def process_input(self):
+        '''
+            Processes any pending input events.
+        '''
+        pass
+
+    @abstractmethod
+    def add_object(self, obj):
+        '''
+            Adds a Positional object to the screen for drawing.  The object may lie outside
+            of the screen boundaries.
+        '''
+        pass
+
+    def teardown(self):
+        pass
 
 
 class CursesScreen(Screen):
