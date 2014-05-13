@@ -185,8 +185,8 @@ class Game(object):
         self.screen.on_key_down(Screen.H, self.player.move_left)
         self.screen.on_key_down(Screen.L, self.player.move_right)
 
-        self.tickers.append((self.screen.process_input, 1))
-        self.tickers.append((self.move_enemies, 20))
+        self.add_ticker(self.screen.process_input)
+        self.add_ticker(self.move_enemies, every=1/3.0)
 
     def teardown(self):
         self.screen.teardown()
@@ -224,6 +224,10 @@ class Game(object):
                 enemy.move_rel(0, -1 if dy < 0 else 1)
             else:
                 enemy.move_rel(-1 if dx < 0 else 1, 0)
+
+    def add_ticker(self, ticker, every=1/FRAME_RATE):
+        assert every != 0
+        self.tickers.append((ticker, every * FRAME_RATE))
 
 def main():
     """ your app starts here
