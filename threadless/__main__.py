@@ -1,8 +1,10 @@
 from __future__ import print_function
 
+import atexit
 import curses
 import sys
 import time
+
 
 class Positional(object):
     def __init__(self, x, y):
@@ -29,11 +31,14 @@ class Positional(object):
         self.x += dx
         self.y += dy
 
+
 class Player(Positional):
     pass
 
+
 class Enemy(Positional):
     pass
+
 
 class Screen(object):
     Q = 1
@@ -41,6 +46,12 @@ class Screen(object):
     K = 3
     H = 4
     L = 5
+
+
+@atexit.register
+def cleanup_curses():
+    curses.endwin()
+
 
 class CursesScreen(Screen):
     KEY_MAP = {
@@ -100,6 +111,7 @@ class CursesScreen(Screen):
 
     def add_object(self, obj):
         self.objects.append(obj)
+
 
 class Game(object):
     FRAME_RATE = 60
