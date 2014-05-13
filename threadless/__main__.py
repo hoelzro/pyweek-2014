@@ -5,7 +5,6 @@ import atexit
 import curses
 import random
 import time
-import traceback
 
 
 class Positional(object):
@@ -261,5 +260,4 @@ def main():
         game.teardown()
     except Exception, e:
         game.teardown()
-        traceback.print_exc()
-        print(str(e))
+        raise
