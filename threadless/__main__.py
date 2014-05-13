@@ -232,8 +232,8 @@ def main():
     try:
         game = Game()
         game.run()
+        game.teardown()
     except Exception, e:
+        game.teardown()
         print(sys.exc_info())
         print(str(e))
-    finally:
-        game.teardown()
