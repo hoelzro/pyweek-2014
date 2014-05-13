@@ -197,7 +197,7 @@ class Game(object):
         start = time.time()
         tick = 0
         while self.is_running:
-            tick = (tick + 1) % FRAME_RATE
+            tick += 1
             self.screen.draw()
             for ticker, tick_delay in self.tickers:
                 if tick % tick_delay == 0:
