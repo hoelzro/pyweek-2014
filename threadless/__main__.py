@@ -119,11 +119,13 @@ class CursesScreen(Screen):
         curses.cbreak()
         self.screen.nodelay(1)
         self.screen.keypad(1)
+        self.cursor_state = curses.curs_set(0)
 
         self.keybindings = {}
         self.objects = []
 
     def teardown(self):
+        curses.curs_set(self.cursor_state)
         curses.nocbreak()
         self.screen.keypad(0)
         curses.echo()
