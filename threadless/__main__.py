@@ -16,7 +16,6 @@ class Positional(object):
     def getpos(self):
         return self.x, self.y
 
-    # XXX screen boundaries
     def move_down(self):
         if self.y < self.MAX_Y - 1:
             self.y += 1
