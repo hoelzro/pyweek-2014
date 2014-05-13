@@ -78,6 +78,9 @@ class CursesScreen(Screen):
         self.objects = []
 
     def __del__(self):
+        # @rob: The atexit handler is necessary because
+        # there's no guarantee that the garbage collector
+        # runs
         curses.nocbreak()
         self.screen.keypad(0)
         curses.echo()
