@@ -159,9 +159,9 @@ class CursesScreen(Screen):
         self.objects.append(obj)
 
 
-class Game(object):
-    FRAME_RATE = 60
+FRAME_RATE = 60.0
 
+class Game(object):
     def __init__(self):
         self.is_running = True
         self.tickers = [
@@ -192,22 +192,12 @@ class Game(object):
         self.screen.teardown()
 
     def run(self):
-        frames_per_second = 60.0
-        seconds_per_frame = 1 / frames_per_second
-
-        # ticks_per_second:
-        # 1 -> 60
-        # 2 -> 30
-        # 3 -> 20
-        # 4 -> 15
-        # 5 -> 12
-        # 6 -> 10
-        # 60 -> 1
+        seconds_per_frame = 1 / FRAME_RATE
 
         start = time.time()
         tick = 0
         while self.is_running:
-            tick = (tick + 1) % 60
+            tick = (tick + 1) % FRAME_RATE
             self.screen.draw()
             for ticker, tick_delay in self.tickers:
                 if tick % tick_delay == 0:
