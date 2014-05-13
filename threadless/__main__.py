@@ -3,6 +3,7 @@ from __future__ import print_function
 from abc import abstractmethod, ABCMeta
 import atexit
 import curses
+import random
 import time
 import traceback
 
@@ -175,9 +176,7 @@ class Game(object):
         self.player = Player(x, y, width, height)
         self.screen.add_object(self.player)
 
-        self.enemies = [ Enemy(0, 0, width, height) ]
-        for enemy in self.enemies:
-            self.screen.add_object(enemy)
+        self.enemies = []
 
         self.screen.on_key_down(Screen.Q, self.stop_running)
         self.screen.on_key_down(Screen.J, self.player.move_down)
@@ -187,6 +186,7 @@ class Game(object):
 
         self.add_ticker(self.screen.process_input)
         self.add_ticker(self.move_enemies, every=1/3.0)
+        self.add_ticker(self.spawn_enemies, every=60)
 
     def teardown(self):
         self.screen.teardown()
@@ -228,6 +228,28 @@ class Game(object):
     def add_ticker(self, ticker, every=1/FRAME_RATE):
         assert every != 0
         self.tickers.append((ticker, every * FRAME_RATE))
+
+    def spawn_enemies(self):
+        width, height = self.screen.get_size()
+        for i in range(0, 10):
+            side = random.randint(0, 3)
+
+            if side == 0:
+                x = random.randint(0, width - 1)
+                y = 0
+            elif side == 1:
+                x = width - 1
+                y = random.randint(0, height - 1)
+            elif side == 2:
+                x = random.randint(0, width - 1)
+                y = height - 1
+            elif side == 3:
+                x = 0
+                y = random.randint(0, height - 1)
+
+            enemy = Enemy(x, y, width, height)
+            self.enemies.append(enemy)
+            self.screen.add_object(enemy)
 
 def main():
     """ your app starts here
