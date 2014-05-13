@@ -3,8 +3,8 @@ from __future__ import print_function
 from abc import abstractmethod, ABCMeta
 import atexit
 import curses
-import sys
 import time
+import traceback
 
 
 class Positional(object):
@@ -235,5 +235,5 @@ def main():
         game.teardown()
     except Exception, e:
         game.teardown()
-        print(sys.exc_info())
+        traceback.print_exc()
         print(str(e))
