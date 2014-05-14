@@ -13,11 +13,10 @@ class YoureDead(Exception):
         super(Exception, self).__init__("You're dead! =(")
 
 class Positional(object):
-    def __init__(self, x, y, width, height):
-        self.x = x
-        self.y = y
-        self.MAX_X = width
-        self.MAX_Y = height
+    def __init__(self, x, y, movement_checker):
+        self.x                = x
+        self.y                = y
+        self.movement_checker = movement_checker
 
     def getpos(self):
         return self.x, self.y
@@ -35,10 +34,12 @@ class Positional(object):
         self.move_rel(1, 0)
 
     def move_rel(self, dx, dy):
-        if 0 <= self.x + dx < self.MAX_X - 1:
-            self.x += dx
-        if 0 <= self.y + dy < self.MAX_Y - 1:
-            self.y += dy
+        new_x = self.x + dx
+        new_y = self.y + dy
+
+        if self.movement_checker.permit_movement(self, new_x, new_y):
+            self.x = new_x
+            self.y = new_y
 
 
 # XXX superclass isn't quite right, but whatever
@@ -189,7 +190,7 @@ class Game(object):
         width, height = self.screen.get_size()
         x = int(width / 2)
         y = int(height / 2)
-        self.player = Player(x, y, width, height)
+        self.player = Player(x, y, self)
         self.screen.add_object(self.player)
 
         self.enemies = []
@@ -266,7 +267,7 @@ class Game(object):
                 x = 0
                 y = random.randint(0, height - 1)
 
-            enemy = Enemy(x, y, width, height)
+            enemy = Enemy(x, y, self)
             self.enemies.append(enemy)
             self.screen.add_object(enemy)
 
@@ -282,10 +283,20 @@ class Game(object):
     def place_block(self):
         x, y = self.player.getpos()
         width, height = self.screen.get_size()
-        block = StoneBlock(x + 1, y, width, height)
+        block = StoneBlock(x + 1, y, self)
         self.blocks.append(block)
         self.screen.add_object(block)
 
+    def permit_movement(self, obj, x, y):
+        width, height = self.screen.get_size()
+
+        if x < 0 or x >= width - 1:
+            return False
+
+        if y < 0 or y >= height:
+            return False
+
+        return True
 
 def main():
     """ your app starts here
