@@ -254,14 +254,16 @@ class Game(object):
         for i in range(0, 10):
             side = random.randint(0, 3)
 
+            # for some reason, (width - 1, height - 1) as coordinates don't work, so
+            # we use width - 2
             if side == 0:
-                x = random.randint(0, width - 1)
+                x = random.randint(0, width - 2)
                 y = 0
             elif side == 1:
                 x = width - 1
                 y = random.randint(0, height - 1)
             elif side == 2:
-                x = random.randint(0, width - 1)
+                x = random.randint(0, width - 2)
                 y = height - 1
             elif side == 3:
                 x = 0
