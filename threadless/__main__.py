@@ -214,9 +214,9 @@ class Game(object):
     def run(self):
         seconds_per_frame = 1 / FRAME_RATE
 
-        start = time.time()
         tick = 0
         while self.is_running:
+            start = time.time()
             tick += 1
             self.screen.draw()
             for ticker, tick_delay in self.tickers:
@@ -227,7 +227,6 @@ class Game(object):
             wait_time = seconds_per_frame - (end - start)
             if wait_time > 0:
                 time.sleep(wait_time)
-            start = end
 
     def stop_running(self):
         self.is_running = False
