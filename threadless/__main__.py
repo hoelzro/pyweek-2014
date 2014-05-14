@@ -296,6 +296,12 @@ class Game(object):
         if y < 0 or y >= height:
             return False
 
+        for block in self.blocks:
+            block_x, block_y = block.getpos()
+
+            if x == block_x and y == block_y:
+                return False
+
         return True
 
 def main():
