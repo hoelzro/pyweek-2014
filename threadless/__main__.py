@@ -8,6 +8,9 @@ import time
 
 logging.basicConfig(filename='threadless.log', level=logging.DEBUG)
 
+class YoureDead(Exception):
+    def __init__(self):
+        super(Exception, self).__init__("You're dead! =(")
 
 class Positional(object):
     def __init__(self, x, y, width, height):
@@ -194,6 +197,7 @@ class Game(object):
         self.add_ticker(self.screen.process_input)
         self.add_ticker(self.move_enemies, every=1/3.0)
         self.add_ticker(self.spawn_enemies, every=60)
+        self.add_ticker(self.check_for_player_death)
 
     def teardown(self):
         self.screen.teardown()
@@ -258,12 +262,25 @@ class Game(object):
             self.enemies.append(enemy)
             self.screen.add_object(enemy)
 
+    def check_for_player_death(self):
+        player_x, player_y = self.player.getpos()
+
+        for enemy in self.enemies:
+            enemy_x, enemy_y = enemy.getpos()
+
+            if player_x == enemy_x and player_y == enemy_y:
+                raise YoureDead()
+
+
 def main():
     """ your app starts here
     """
 
     try:
-        game = Game()
-        game.run()
-    finally:
-        game.teardown()
+        try:
+            game = Game()
+            game.run()
+        finally:
+            game.teardown()
+    except YoureDead, _:
+        print("You're dead! =(")
