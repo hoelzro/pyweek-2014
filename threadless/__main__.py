@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 from abc import abstractmethod, ABCMeta
-import atexit
 import curses
 import random
 import time
