@@ -220,7 +220,7 @@ class Game(object):
             dx = player_x - enemy_x
             dy = player_y - enemy_y
 
-            if dx < dy:
+            if abs(dx) < abs(dy):
                 enemy.move_rel(0, -1 if dy < 0 else 1)
             else:
                 enemy.move_rel(-1 if dx < 0 else 1, 0)
