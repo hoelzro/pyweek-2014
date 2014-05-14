@@ -20,7 +20,7 @@ class Positional(object):
         return self.x, self.y
 
     def move_down(self):
-        self.move_up(0, 1)
+        self.move_rel(0, 1)
 
     def move_up(self):
         self.move_rel(0, -1)
