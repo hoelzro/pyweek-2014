@@ -224,7 +224,6 @@ class Game(object):
                     ticker()
 
             end       = time.time()
-            delta     = end - start
             wait_time = seconds_per_frame - (end - start)
             if wait_time > 0:
                 time.sleep(wait_time)
