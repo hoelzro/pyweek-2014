@@ -17,20 +17,16 @@ class Positional(object):
         return self.x, self.y
 
     def move_down(self):
-        if self.y < self.MAX_Y - 1:
-            self.y += 1
+        self.move_up(0, 1)
 
     def move_up(self):
-        if self.y > 0:
-            self.y -= 1
+        self.move_rel(0, -1)
 
     def move_left(self):
-        if self.x > 0:
-            self.x -= 1
+        self.move_rel(-1, 0)
 
     def move_right(self):
-        if self.x < self.MAX_X - 2:
-            self.x += 1
+        self.move_rel(1, 0)
 
     def move_rel(self, dx, dy):
         if 0 <= self.x + dx < self.MAX_X - 2:
