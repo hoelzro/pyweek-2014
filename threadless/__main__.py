@@ -41,9 +41,12 @@ class Positional(object):
             self.y += dy
 
 
-class Player(Positional):
+# XXX superclass isn't quite right, but whatever
+class StoneBlock(Positional):
     pass
 
+class Player(Positional):
+    pass
 
 class Enemy(Positional):
     pass
@@ -59,6 +62,7 @@ class Screen(object):
     A = 7
     S = 8
     D = 9
+    E = 10
 
     __metaclass__ = ABCMeta
 
@@ -108,6 +112,7 @@ class CursesScreen(Screen):
     KEY_MAP = {
         Screen.A: ord('a'),
         Screen.D: ord('d'),
+        Screen.E: ord('e'),
         Screen.H: ord('h'),
         Screen.J: ord('j'),
         Screen.K: ord('k'),
@@ -118,8 +123,9 @@ class CursesScreen(Screen):
     }
 
     CHAR_FOR_TYPE = {
-        Player: 'P',
-        Enemy:  'E',
+        Player:      'P',
+        Enemy:       'E',
+        StoneBlock:  'X',
     }
 
     def __init__(self):
@@ -187,12 +193,14 @@ class Game(object):
         self.screen.add_object(self.player)
 
         self.enemies = []
+        self.blocks  = []
 
         self.screen.on_key_down(Screen.Q, self.stop_running)
         self.screen.on_key_down(Screen.S, self.player.move_down)
         self.screen.on_key_down(Screen.W, self.player.move_up)
         self.screen.on_key_down(Screen.A, self.player.move_left)
         self.screen.on_key_down(Screen.D, self.player.move_right)
+        self.screen.on_key_down(Screen.E, self.place_block)
 
         self.add_ticker(self.screen.process_input)
         self.add_ticker(self.move_enemies, every=1/3.0)
@@ -270,6 +278,13 @@ class Game(object):
 
             if player_x == enemy_x and player_y == enemy_y:
                 raise YoureDead()
+
+    def place_block(self):
+        x, y = self.player.getpos()
+        width, height = self.screen.get_size()
+        block = StoneBlock(x + 1, y, width, height)
+        self.blocks.append(block)
+        self.screen.add_object(block)
 
 
 def main():
