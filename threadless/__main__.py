@@ -265,7 +265,5 @@ def main():
     try:
         game = Game()
         game.run()
+    finally:
         game.teardown()
-    except Exception, e:
-        game.teardown()
-        raise
