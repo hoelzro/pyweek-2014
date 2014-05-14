@@ -49,6 +49,10 @@ class Screen(object):
     K = 3
     H = 4
     L = 5
+    W = 6
+    A = 7
+    S = 8
+    D = 9
 
     __metaclass__ = ABCMeta
 
@@ -96,11 +100,15 @@ class Screen(object):
 
 class CursesScreen(Screen):
     KEY_MAP = {
-        Screen.Q: ord('q'),
+        Screen.A: ord('a'),
+        Screen.D: ord('d'),
+        Screen.H: ord('h'),
         Screen.J: ord('j'),
         Screen.K: ord('k'),
-        Screen.H: ord('h'),
         Screen.L: ord('l'),
+        Screen.Q: ord('q'),
+        Screen.S: ord('s'),
+        Screen.W: ord('w'),
     }
 
     CHAR_FOR_TYPE = {
@@ -175,10 +183,10 @@ class Game(object):
         self.enemies = []
 
         self.screen.on_key_down(Screen.Q, self.stop_running)
-        self.screen.on_key_down(Screen.J, self.player.move_down)
-        self.screen.on_key_down(Screen.K, self.player.move_up)
-        self.screen.on_key_down(Screen.H, self.player.move_left)
-        self.screen.on_key_down(Screen.L, self.player.move_right)
+        self.screen.on_key_down(Screen.S, self.player.move_down)
+        self.screen.on_key_down(Screen.W, self.player.move_up)
+        self.screen.on_key_down(Screen.A, self.player.move_left)
+        self.screen.on_key_down(Screen.D, self.player.move_right)
 
         self.add_ticker(self.screen.process_input)
         self.add_ticker(self.move_enemies, every=1/3.0)
