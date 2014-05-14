@@ -303,8 +303,8 @@ def main():
     """
 
     try:
+        game = Game()
         try:
-            game = Game()
             game.run()
         finally:
             game.teardown()
