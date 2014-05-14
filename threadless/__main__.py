@@ -2,8 +2,11 @@ from __future__ import print_function
 
 from abc import abstractmethod, ABCMeta
 import curses
+import logging
 import random
 import time
+
+logging.basicConfig(filename='threadless.log', level=logging.DEBUG)
 
 
 class Positional(object):
