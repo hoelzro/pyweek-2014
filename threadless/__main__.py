@@ -29,7 +29,7 @@ class Positional(object):
         self.move_rel(1, 0)
 
     def move_rel(self, dx, dy):
-        if 0 <= self.x + dx < self.MAX_X - 2:
+        if 0 <= self.x + dx < self.MAX_X - 1:
             self.x += dx
         if 0 <= self.y + dy < self.MAX_Y - 1:
             self.y += dy
