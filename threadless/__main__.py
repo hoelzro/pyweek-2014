@@ -79,8 +79,7 @@ class Enemy(Positional):
 
         for move in possible_moves:
             new_x, new_y, score = move
-            distance = math.sqrt(abs(new_x - player_x) ** 2 + abs(new_y - player_y) ** 2)
-            score = round(distance)
+            score = math.sqrt(abs(new_x - player_x) ** 2 + abs(new_y - player_y) ** 2)
 
             for prev_x, prev_y in self.previous_positions:
                 if new_x == prev_x and new_y == prev_y:
