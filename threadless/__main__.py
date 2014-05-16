@@ -83,7 +83,7 @@ class Enemy(Positional):
 
             for prev_x, prev_y in self.previous_positions:
                 if new_x == prev_x and new_y == prev_y:
-                    score += BACKTRACK_PENALTY
+                    score += self.BACKTRACK_PENALTY
                     break # we might weight positions further back differently
             move[2] = score
         best_move = min(possible_moves, key=operator.itemgetter(2))
