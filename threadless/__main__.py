@@ -54,6 +54,7 @@ class Player(Positional):
 class Enemy(Positional):
     MEMORY_LENGTH = 5
     BACKTRACK_PENALTY = 5
+    MOMENTUM_BONUS = 1
 
     def __init__(self, *args, **kwargs):
         super(Enemy, self).__init__(*args, **kwargs)
@@ -80,6 +81,14 @@ class Enemy(Positional):
         for move in possible_moves:
             new_x, new_y, score = move
             score = math.sqrt(abs(new_x - player_x) ** 2 + abs(new_y - player_y) ** 2)
+
+            if self.previous_positions:
+                previous_position = self.previous_positions[-1]
+                dx = abs(previous_position[0] - new_x)
+                dy = abs(previous_position[1] - new_y)
+
+                if dx == 2 or dy == 2:
+                    score -= self.MOMENTUM_BONUS
 
             for prev_x, prev_y in self.previous_positions:
                 if new_x == prev_x and new_y == prev_y:
