@@ -3,6 +3,8 @@ from __future__ import print_function
 from abc import abstractmethod, ABCMeta
 import curses
 import logging
+import math
+import operator
 import random
 import time
 
@@ -50,8 +52,43 @@ class Player(Positional):
     pass
 
 class Enemy(Positional):
-    pass
+    MEMORY_LENGTH = 5
+    BACKTRACK_PENALTY = 5
 
+    def __init__(self, *args, **kwargs):
+        super(Enemy, self).__init__(*args, **kwargs)
+        self.previous_positions = []
+
+    def move_rel(self, dx, dy):
+        current_position = self.getpos()
+        self.previous_positions.append(current_position)
+        if len(self.previous_positions) > self.MEMORY_LENGTH:
+            self.previous_positions.pop(0)
+        super(Enemy, self).move_rel(dx, dy)
+
+    def calculate_next_move(self):
+        x, y = self.getpos()
+        player_x, player_y = self.movement_checker.player.getpos() # XXX not ideal
+        possible_moves = [
+            [x + dx, y + dy, 0] for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1))
+        ]
+        possible_moves = [ move for move in possible_moves if self.movement_checker.permit_movement(self, move[0], move[1]) ]
+
+        if not possible_moves:
+            return None
+
+        for move in possible_moves:
+            new_x, new_y, score = move
+            distance = math.sqrt(abs(new_x - player_x) ** 2 + abs(new_y - player_y) ** 2)
+            score = round(distance)
+
+            for prev_x, prev_y in self.previous_positions:
+                if new_x == prev_x and new_y == prev_y:
+                    score += BACKTRACK_PENALTY
+                    break # we might weight positions further back differently
+            move[2] = score
+        best_move = min(possible_moves, key=operator.itemgetter(2))
+        return best_move[0:2]
 
 class Screen(object):
     Q = 1
@@ -235,13 +272,9 @@ class Game(object):
         player_x, player_y = self.player.getpos()
         for enemy in self.enemies:
             enemy_x, enemy_y = enemy.getpos()
-            dx = player_x - enemy_x
-            dy = player_y - enemy_y
-
-            if abs(dx) < abs(dy):
-                enemy.move_rel(0, -1 if dy < 0 else 1)
-            else:
-                enemy.move_rel(-1 if dx < 0 else 1, 0)
+            next_move = enemy.calculate_next_move()
+            if next_move:
+                enemy.move_rel(next_move[0] - enemy_x, next_move[1] - enemy_y)
 
     def add_ticker(self, ticker, every=1/FRAME_RATE):
         assert every != 0
